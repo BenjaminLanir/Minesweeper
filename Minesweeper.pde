@@ -1,4 +1,5 @@
 private int buttonSize = 40;
+private int numBombs = 50;
 private int num_rows = 20;
 private int num_cols = 20;
 private Button[][] buttons;
@@ -13,6 +14,7 @@ public void setup()
             buttons[i][j] = new Button(i, j);
         }
     }
+    setBombs();
 }
 public void draw()
 {
@@ -25,22 +27,90 @@ public void draw()
         }
     }
 }
+public void setBombs()
+{
+    for (int i = 0; i < numBombs; i++)
+    {
+        int z = (int) (Math.random()*20);
+        int x = (int) (Math.random()*20);
+        if (buttons[z][x].bomb() == true)
+        {
+            i--;
+        }
+        else
+        {
+            buttons[z][x].setBomb(true);
+        }
+    }
+}
 public class Button
 {
-    int myX, myY;
-    boolean isPressed, isMarked;
+    private int myX, myY, around;
+    private boolean isPressed, isMarked, isBomb;
     public Button(int x, int y)
     {
         myX = buttonSize*x;
         myY = buttonSize*y;
+        around = 0;
         isPressed = false;
         isMarked = false;
+        isBomb = false;
+    }
+    public void findBombs()
+    {
+        int i = 0;
+        if (isMarked == true)
+        {
+        }
+        else
+        {
+            if (buttons[myX/10 - 1][myY/10 - 1].bomb() == true)
+            {
+                i++;
+            }
+            if (buttons[myX/10 - 1][myY/10].bomb() == true)
+            {
+                i++;
+            }
+            if (buttons[myX/10 - 1][myY/10 + 1].bomb() == true)
+            {
+                i++;
+            }
+            if (buttons[myX/10][myY/10 - 1].bomb() == true)
+            {
+                i++;
+            }
+            if (buttons[myX/10][myY/10 + 1].bomb() == true)
+            {
+                i++;
+            }
+            if (buttons[myX/10 + 1][myY/10 + 1].bomb() == true)
+            {
+                i++;
+            }
+            if (buttons[myX/10 + 1][myY/10].bomb() == true)
+            {
+                i++;
+            }
+            if (buttons[myX/10 + 1][myY/10 - 1].bomb() == true)
+            {
+                i++;
+            }
+        }
+        around = i;
     }
     public void show()
     {
         if (isPressed == true)
         {
-            fill(200);
+            if(isBomb == true)
+            {
+                fill(255, 0, 0);
+            }
+            else
+            {
+                fill(200);
+            }
         }
         else if (isMarked == true)
         {
@@ -55,10 +125,61 @@ public class Button
     public void updateButton()
     {
         isPressed = true;
+        {
+        int i = 0;
+        if (isMarked == true)
+        {
+        }
+        else
+        {
+            if (buttons[myX/10 - 1][myY/10 - 1].bomb() == false)
+            {
+                buttons[myX/10 - 1][myY/10 - 1].updateButton();
+            }
+            if (buttons[myX/10 - 1][myY/10].bomb() == false)
+            {
+                buttons[myX/10 - 1][myY/10].updateButton();
+            }
+            if (buttons[myX/10 - 1][myY/10 + 1].bomb() == false)
+            {
+                buttons[myX/10 - 1][myY/10 + 1].updateButton();
+            }
+            if (buttons[myX/10][myY/10 - 1].bomb() == false)
+            {
+                buttons[myX/10][myY/10 - 1].updateButton();
+            }
+            if (buttons[myX/10][myY/10 + 1].bomb() == false)
+            {
+                buttons[myX/10][myY/10 + 1].updateButton();
+            }
+            if (buttons[myX/10 + 1][myY/10 + 1].bomb() == false)
+            {
+                buttons[myX/10 + 1][myY/10 + 1].updateButton();
+            }
+            if (buttons[myX/10 + 1][myY/10].bomb() == false)
+            {
+                buttons[myX/10 + 1][myY/10].updateButton();
+            }
+            if (buttons[myX/10 + 1][myY/10 - 1].bomb() == false)
+            {
+                buttons[myX/10 + 1][myY/10 - 1].updateButton();
+            }
+        }
+        around = i;
+    }
     }
     public void markButton()
     {
         isMarked = true;
+    }
+    public boolean bomb(){return isBomb;}
+    public void setBomb(boolean wow)
+    {
+        isBomb = wow;
+    }
+    public void setPressed(boolean incredible)
+    {
+        isPressed = incredible;
     }
 }
 public void mousePressed(MouseEvent i)
