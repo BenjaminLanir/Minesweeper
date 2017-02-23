@@ -99,6 +99,11 @@ public class Button
         }
         around = i;
     }
+    public int numBombs()
+    {
+        findBombs();
+        return around;
+    }
     public void show()
     {
         if (isPressed == true)
@@ -124,15 +129,46 @@ public class Button
     }
     public void updateButton()
     {
+        findBombs();
         isPressed = true;
-        {
-        int i = 0;
         if (isMarked == true)
         {
         }
-        else
+        else if (around == 0)
         {
-            if (buttons[myX/10 - 1][myY/10 - 1].bomb() == false)
+            if(myX/10 > 0)
+            {
+                if (myY/10 > 0)
+                {
+                    buttons[myX/10 - 1][myY/10 - 1].updateButton();
+                }
+                if (myY/10 < num_rows)
+                {
+                    buttons[myX/10 - 1][myY/10 + 1].updateButton();
+                }
+                buttons[myX/10 - 1][myY/10].updateButton();
+            }
+            if (myX/10 < num_cols)
+            {
+                if (myY/10 > 0)
+                {
+                    buttons[myX/10 + 1][myY/10 - 1].updateButton();
+                }
+                if (myY/10 < num_rows)
+                {
+                    buttons[myX/10 + 1][myY/10 + 1].updateButton();
+                }
+                buttons[myX/10 + 1][myY/10].updateButton();
+            }
+            if (myY/10 > 0)
+            {
+                buttons[myX/10][myY/10 - 1].updateButton();
+            }
+            if (myY/10 < num_rows)
+            {
+                buttons[myX/10][myY/10 + 1].updateButton();
+            }
+            /*if (buttons[myX/10 - 1][myY/10 - 1].bomb() == false)
             {
                 buttons[myX/10 - 1][myY/10 - 1].updateButton();
             }
@@ -163,10 +199,8 @@ public class Button
             if (buttons[myX/10 + 1][myY/10 - 1].bomb() == false)
             {
                 buttons[myX/10 + 1][myY/10 - 1].updateButton();
-            }
+            }*/
         }
-        around = i;
-    }
     }
     public void markButton()
     {
