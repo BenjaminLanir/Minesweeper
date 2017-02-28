@@ -44,13 +44,15 @@ public void setBombs()
 }
 public class Button
 {
-  private int myX, myY, around;
+  private int myX, myY, around, myCol, myRow;
   private boolean isPressed, isMarked, isBomb;
   public Button(int x, int y)
   {
+    myCol = x;
+    myRow = y;
     myX = buttonSize*x;
     myY = buttonSize*y;
-    around = 0;
+    around = 5;
     isPressed = false;
     isMarked = false;
     isBomb = false;
@@ -58,7 +60,7 @@ public class Button
   public void findBombs()
   {
     int i = 0;
-    if (isMarked == true)
+    if (isBomb == true)
     {
     } else
     {
@@ -154,45 +156,46 @@ public class Button
   {
     findBombs();
     isPressed = true;
-    int theY = myY/10;
-    int theX = myX/10;
-    if (isMarked == true)
+        System.out.println(around);
+        System.out.println(isBomb);
+    if (isBomb == true)
     {
+
     }
     else if (around == 0)
     {
-      if (theY > 0)
+      if (myRow > 0)
       {
-        buttons[theX][theY - 1].updateButton();
+        buttons[myRow - 1][myCol].updateButton();
       }
-      if (theY > 0 && theX > 0)
+      if (myRow > 0 && myCol > 0)
       {
-        buttons[theX-1][theY-1].updateButton();
+        buttons[myRow - 1][myCol - 1].updateButton();
       }
-      if (theY > 0 && theX < num_cols)
+      if (myRow > 0 && myCol < num_cols - 1)
       {
-        buttons[theX+1][theY-1].updateButton();
+        buttons[myRow - 1][myCol + 1].updateButton();
       }
-      if (theX > 0)
+      /*if (myCol > 0)
       {
-        buttons[theX-1][theY].updateButton();
+        buttons[myRow][myCol - 1].updateButton();
       }
-      if (theX < num_cols)
+      if (myCol < num_cols)
       {
-        buttons[theX+1][theY].updateButton();
+        buttons[myRow][myCol + 1].updateButton();
       }
-      if (theY < num_rows)
+      if (myRow < num_rows)
       {
-        buttons[theX][theY+1].updateButton();
+        buttons[myRow + 1][myCol].updateButton();
       }
-      if (theY < num_rows && theX > 0)
+      if (myRow < num_rows && myCol > 0)
       {
-        buttons[theX-1][theY+1].updateButton();
+        buttons[myRow + 1][myCol - 1].updateButton();
       }
-      if (theY < num_rows && theX < num_cols)
+      if (myRow < num_rows && myCol < num_cols)
       {
-        buttons[theX+1][theY+1].updateButton();
-      }
+        buttons[myRow + 1][myCol + 1].updateButton();
+      }*/
     }
   }
 
