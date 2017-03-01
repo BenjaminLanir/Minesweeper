@@ -48,90 +48,80 @@ public class Button
   private boolean isPressed, isMarked, isBomb;
   public Button(int x, int y)
   {
-    myCol = x;
-    myRow = y;
+    myCol = y;
+    myRow = x;
     myX = buttonSize*x;
     myY = buttonSize*y;
-    around = 5;
+    around = 0;
     isPressed = false;
     isMarked = false;
     isBomb = false;
   }
-  public void findBombs()
-  {
-    int i = 0;
-    if (isBomb == true)
-    {
-    } else
-    {
-      if (myY/10 > 0)
-      {
-        i++;
-      }
-        if (myY/10 < num_rows)
-      {
-        i++;
-      }
-      i++;
-    }
-    if (myX/10 < num_cols)
-    {
-      if (myY/10 > 0)
-      {
-        i++;
-      }
-      if (myY/10 < num_rows)
-      {
-        i++;
-      }
-      i++;
-    }
-    if (myY/10 > 0)
-    {
-      i++;
-    }
-    if (myY/10 < num_rows)
-    {
-      i++;
-    }
-    /*if (buttons[myX/10 - 1][myY/10 - 1].bomb() == true)
-     {
-     i++;
-     }
-     if (buttons[myX/10 - 1][myY/10].bomb() == true)
-     {
-     i++;
-     }
-     if (buttons[myX/10 - 1][myY/10 + 1].bomb() == true)
-     {
-     i++;
-     }
-     if (buttons[myX/10][myY/10 - 1].bomb() == true)
-     {
-     i++;
-     }
-     if (buttons[myX/10][myY/10 + 1].bomb() == true)
-     {
-     i++;
-     }
-     if (buttons[myX/10 + 1][myY/10 + 1].bomb() == true)
-     {
-     i++;
-     }
-     if (buttons[myX/10 + 1][myY/10].bomb() == true)
-     {
-     i++;
-     }
-     if (buttons[myX/10 + 1][myY/10 - 1].bomb() == true)
-     {
-     i++;
-     }*/
-  }
   public int numBombs()
   {
-    findBombs();
-    return around;
+    int i = 0;
+    if (isBomb == false)
+    {
+      if (myRow > 0)
+      {
+        if (buttons[myRow - 1][myCol].getBomb() == true)
+        {
+          i++;
+        }
+      }
+      if (myRow > 0 && myCol > 0)
+      {
+        if (buttons[myRow - 1][myCol - 1].getBomb() == true)
+        {
+          i++;
+        }
+      }
+      if (myRow > 0 && myCol < num_cols - 1)
+      {
+        if (buttons[myRow - 1][myCol + 1].getBomb() == true)
+        {
+          i++;
+        }
+      }
+      if (myCol > 0)
+      {
+        if (buttons[myRow][myCol - 1].getBomb() == true)
+        {
+          i++;
+        }
+      }
+      if (myCol < num_cols - 1)
+      {
+        if (buttons[myRow][myCol + 1].getBomb() == true)
+        {
+          i++;
+        }
+      }
+      if (myRow < num_rows - 1)
+      {
+        if (buttons[myRow + 1][myCol].getBomb() == true)
+        {
+          i++;
+        }
+      }
+      if (myRow < num_rows - 1 && myCol > 0)
+      {
+        if (buttons[myRow + 1][myCol - 1].getBomb() == true)
+        {
+          i++;
+        }
+      }
+      if (myRow < num_rows - 1 && myCol < num_cols - 1)
+      {
+        if (buttons[myRow + 1][myCol + 1].getBomb() == true)
+        {
+          i++;
+        }
+      }
+    }
+    return i;
   }
+  public boolean getBomb() {return isBomb;}
   public void show()
   {
     if (isPressed == true)
@@ -151,18 +141,13 @@ public class Button
       fill(60);
     }
     rect(myX, myY, buttonSize, buttonSize);
+        fill(0);
+        text(numBombs(), myX + 10, myY + 10);
   }
   public void updateButton()
   {
-    findBombs();
     isPressed = true;
-        System.out.println(around);
-        System.out.println(isBomb);
-    if (isBomb == true)
-    {
-
-    }
-    else if (around == 0)
+    if (numBombs() == 0 && isMarked == false)
     {
       if (myRow > 0)
       {
@@ -176,23 +161,26 @@ public class Button
       {
         buttons[myRow - 1][myCol + 1].updateButton();
       }
-      /*if (myCol > 0)
+      if (myCol > 0)
       {
         buttons[myRow][myCol - 1].updateButton();
       }
-      if (myCol < num_cols)
+      if (myCol < num_cols - 1)
       {
-        buttons[myRow][myCol + 1].updateButton();
+        if (buttons[myRow][myCol + 1].getPressed() == false)
+        {
+          buttons[myRow][myCol + 1].updateButton();
+        }
       }
-      if (myRow < num_rows)
+      /*if (myRow < num_rows - 1)
       {
         buttons[myRow + 1][myCol].updateButton();
       }
-      if (myRow < num_rows && myCol > 0)
+      if (myRow < num_rows - 1 && myCol > 0)
       {
         buttons[myRow + 1][myCol - 1].updateButton();
       }
-      if (myRow < num_rows && myCol < num_cols)
+      if (myRow < num_rows - 1 && myCol < num_cols - 1)
       {
         buttons[myRow + 1][myCol + 1].updateButton();
       }*/
