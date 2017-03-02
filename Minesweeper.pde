@@ -147,23 +147,35 @@ public class Button
   public void updateButton()
   {
     isPressed = true;
-    if (numBombs() == 0 && isMarked == false)
+    if (numBombs() == 0 && isMarked == false && isBomb == false)
     {
       if (myRow > 0)
       {
-        buttons[myRow - 1][myCol].updateButton();
+        if (buttons[myRow - 1][myCol].getPressed() == false)
+        {
+          buttons[myRow - 1][myCol].updateButton();
+        }
       }
       if (myRow > 0 && myCol > 0)
       {
-        buttons[myRow - 1][myCol - 1].updateButton();
+        if (buttons[myRow - 1][myCol - 1].getPressed() == false)
+        {
+          buttons[myRow - 1][myCol - 1].updateButton();
+        }
       }
       if (myRow > 0 && myCol < num_cols - 1)
       {
-        buttons[myRow - 1][myCol + 1].updateButton();
+        if (buttons[myRow - 1][myCol + 1].getPressed() == false)
+        {
+          buttons[myRow - 1][myCol + 1].updateButton();
+        }
       }
       if (myCol > 0)
       {
-        buttons[myRow][myCol - 1].updateButton();
+        if (buttons[myRow][myCol - 1].getPressed() == false)
+        {
+          buttons[myRow][myCol - 1].updateButton();
+        }
       }
       if (myCol < num_cols - 1)
       {
@@ -172,18 +184,27 @@ public class Button
           buttons[myRow][myCol + 1].updateButton();
         }
       }
-      /*if (myRow < num_rows - 1)
+      if (myRow < num_rows - 1)
       {
-        buttons[myRow + 1][myCol].updateButton();
+        if (buttons[myRow + 1][myCol].getPressed() == false)
+        {
+          buttons[myRow + 1][myCol].updateButton();
+        }
       }
       if (myRow < num_rows - 1 && myCol > 0)
       {
-        buttons[myRow + 1][myCol - 1].updateButton();
+        if (buttons[myRow + 1][myCol - 1].getPressed() == false)
+        {
+          buttons[myRow + 1][myCol - 1].updateButton();
+        }
       }
       if (myRow < num_rows - 1 && myCol < num_cols - 1)
       {
-        buttons[myRow + 1][myCol + 1].updateButton();
-      }*/
+        if (buttons[myRow + 1][myCol + 1].getPressed() == false)
+        {
+          buttons[myRow + 1][myCol + 1].updateButton();
+        }
+      }
     }
   }
 
@@ -253,6 +274,7 @@ public class Button
        {
        buttons[myX/10 + 1][myY/10 - 1].updateButton();
        }*/}
+  public boolean getPressed(){return isPressed;}
   public void markButton()
   {
     isMarked = true;
