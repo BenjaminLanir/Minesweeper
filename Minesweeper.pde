@@ -3,6 +3,7 @@ private int numBombs = 50;
 private int num_rows = 20;
 private int num_cols = 20;
 private Button[][] buttons;
+private boolean lost = false;
 public void setup()
 {
   size(800, 800);
@@ -26,6 +27,25 @@ public void draw()
       buttons[i][j].show();
     }
   }
+}
+public void gameLose()
+{
+  lost = true;
+  textSize(20);
+  textAlign(CENTER);
+  fill(0);
+  text("You Lost", 400, 400);
+  fill(255, 0, 0);
+  for (int i = 0; i < num_rows; i++)
+    {
+      for (int j = 0; j < num_cols; j++)
+      {
+        if (buttons[i][j].bomb() == true)
+        {
+          buttons[i][j].setPressed(true);
+        }
+      }
+    }
 }
 public void setBombs()
 {
@@ -129,6 +149,7 @@ public class Button
       if (isBomb == true)
       {
         fill(255, 0, 0);
+        gameLose();
       } else
       {
         fill(200);
@@ -141,8 +162,12 @@ public class Button
       fill(60);
     }
     rect(myX, myY, buttonSize, buttonSize);
-        fill(0);
-        text(numBombs(), myX + 10, myY + 10);
+    if (isPressed == true && isBomb == false)
+    {
+      fill(0);
+      textSize(10);
+      text(numBombs(), myX + 10, myY + 10);
+    }
   }
   public void updateButton()
   {
@@ -293,14 +318,15 @@ public class Button
 }
 public void mousePressed(MouseEvent i)
 {
-  if (i.getButton() == RIGHT)
+  if (lost == false)
   {
-    System.out.println("right");
-    buttons[mouseX/buttonSize][mouseY/buttonSize].markButton();
-  } else
-  {
-    System.out.println("left");
-    buttons[mouseX/buttonSize][mouseY/buttonSize].updateButton();
+    if (i.getButton() == RIGHT)
+    {
+      buttons[mouseX/buttonSize][mouseY/buttonSize].markButton();
+    } else
+    {
+      buttons[mouseX/buttonSize][mouseY/buttonSize].updateButton();
+    }
   }
 }
 /*import de.bezier.guido.*;
