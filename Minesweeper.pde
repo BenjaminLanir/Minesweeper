@@ -1,12 +1,20 @@
 private int buttonSize = 40;
-private int numBombs = 50;
+private int numBombs = 80;
 private int num_rows = 20;
 private int num_cols = 20;
 private Button[][] buttons;
 private boolean lost = false;
+private int levels = 0;
+private boolean j = false;
+private ArrayList <StartButton> totalButtons;
 public void setup()
 {
   size(800, 800);
+  setItUp();
+}
+public void setItUp()
+{
+  //totalButtons.add(new StartButton(360, 370, 80, 60, "Start"));
   buttons = new Button[num_rows][num_cols];
   for (int i = 0; i < num_rows; i++)
   {
@@ -19,14 +27,42 @@ public void setup()
 }
 public void draw()
 {
-  background(255);
+  if (levels == 0)
+  {
+    levels = 1;
+  }
+  else if (levels == 1)
+  {
+    background(255);
+    for (int i = 0; i < num_rows; i++)
+    {
+      for (int j = 0; j <num_cols; j++)
+      {
+        buttons[i][j].show();
+      }
+    }
+  }
+  if (testWin() == 0)
+  {
+    gameWin();
+  }
+}
+public int testWin()
+{
   for (int i = 0; i < num_rows; i++)
   {
     for (int j = 0; j <num_cols; j++)
     {
-      buttons[i][j].show();
+      if (buttons[i][j].getBomb() == true || buttons[i][j].getPressed() == true)
+      {
+      }
+      else
+      {
+        return -1;
+      }
     }
   }
+  return 0;
 }
 public void gameLose()
 {
@@ -46,6 +82,15 @@ public void gameLose()
         }
       }
     }
+}
+public void gameWin()
+{
+  lost = true;
+  textSize(20);
+  textAlign(CENTER);
+  fill(0);
+  text("You Won", 400, 400);
+  fill(255, 0, 0);
 }
 public void setBombs()
 {
@@ -166,7 +211,11 @@ public class Button
     {
       fill(0);
       textSize(10);
-      text(numBombs(), myX + 10, myY + 10);
+      textAlign(CENTER);
+      if (numBombs() != 0)
+      {
+        text(numBombs(), myX + (800/buttonSize), myY + (800/buttonSize));
+      }
     }
   }
   public void updateButton()
@@ -232,73 +281,6 @@ public class Button
       }
     }
   }
-
-  {    /*else if (around == 0)
-    {
-      if (myX/10 > 1)
-      {
-        if (myY/10 > 1)
-        {
-          buttons[myX/10 - 1][myY/10 - 1].updateButton();
-        }
-        if (myY/10 < num_rows)
-        {
-          buttons[myX/10 - 1][myY/10 + 1].updateButton();
-        }
-        buttons[myX/10 - 1][myY/10].updateButton();
-      }
-      if (myX/10 < num_cols)
-      {
-        if (myY/10 > 1)
-        {
-          buttons[myX/10 + 1][myY/10 - 1].updateButton();
-        }
-        if (myY/10 < num_rows)
-        {
-          buttons[myX/10 + 1][myY/10 + 1].updateButton();
-        }
-        buttons[myX/10 + 1][myY/10].updateButton();
-      }
-      if (myY/10 > 1)
-      {
-        buttons[myX/10][myY/10 - 1].updateButton();
-      }
-      if (myY/10 < num_rows)
-      {
-        buttons[myX/10][myY/10 + 1].updateButton();
-      }*/
-      /*if (buttons[myX/10 - 1][myY/10 - 1].bomb() == false)
-       {
-       buttons[myX/10 - 1][myY/10 - 1].updateButton();
-       }
-       if (buttons[myX/10 - 1][myY/10].bomb() == false)
-       {
-       buttons[myX/10 - 1][myY/10].updateButton();
-       }
-       if (buttons[myX/10 - 1][myY/10 + 1].bomb() == false)
-       {
-       buttons[myX/10 - 1][myY/10 + 1].updateButton();
-       }
-       if (buttons[myX/10][myY/10 - 1].bomb() == false)
-       {
-       buttons[myX/10][myY/10 - 1].updateButton();
-       }
-       if (buttons[myX/10][myY/10 + 1].bomb() == false)
-       {
-       buttons[myX/10][myY/10 + 1].updateButton();
-       }
-       if (buttons[myX/10 + 1][myY/10 + 1].bomb() == false)
-       {
-       buttons[myX/10 + 1][myY/10 + 1].updateButton();
-       }
-       if (buttons[myX/10 + 1][myY/10].bomb() == false)
-       {
-       buttons[myX/10 + 1][myY/10].updateButton();
-       }
-       if (buttons[myX/10 + 1][myY/10 - 1].bomb() == false)
-       {
-       buttons[myX/10 + 1][myY/10 - 1].updateButton();
-       }*/}
   public boolean getPressed(){return isPressed;}
   public void markButton()
   {
@@ -316,147 +298,59 @@ public class Button
     isPressed = incredible;
   }
 }
+public class StartButton
+{
+  int myX, myY, myXSize, myYSize;
+  String message;
+  public StartButton(int x, int y, int theX, int theY, String theThought)
+  {
+    myX = x;
+    myY = y;
+    myXSize = theX;
+    myYSize = theY;
+    message = theThought;
+  }
+  public void show()
+  {
+    fill(155, 155, 155);
+    rect(myX, myY, myXSize, myYSize);
+    textAlign(CENTER);
+    fill(0);
+    text(message, myX + (myXSize / 2), myY + (myYSize / 2));
+  }
+  public boolean clicked()
+  {
+    if (mouseX > myX && mouseX < myX + myXSize && mouseY > myY && mouseY < myY + myYSize)
+    {
+      return true;
+    }
+    return false;
+  }
+}
 public void mousePressed(MouseEvent i)
 {
-  if (lost == false)
+  if (i.getButton() == LEFT)
   {
-    if (i.getButton() == RIGHT)
+    j = true;
+  }
+  if (levels == 1)
+  {
+    if (lost == false)
     {
-      buttons[mouseX/buttonSize][mouseY/buttonSize].markButton();
-    } else
-    {
-      buttons[mouseX/buttonSize][mouseY/buttonSize].updateButton();
+      if (i.getButton() == RIGHT)
+      {
+        buttons[mouseX/buttonSize][mouseY/buttonSize].markButton();
+      } else
+      {
+        buttons[mouseX/buttonSize][mouseY/buttonSize].updateButton();
+      }
     }
   }
 }
-/*import de.bezier.guido.*;
- //Declare and initialize NUM_ROWS and NUM_COLS = 20
- private int num_rows = 20;
- private int num_cols = 20;
- private int numBombs = 32;
- private MSButton[][] buttons; //2d array of minesweeper buttons
- private ArrayList <MSButton> bombs; //ArrayList of just the minesweeper buttons that are mined
- 
- void setup ()
- {
- size(1000, 1000);
- textAlign(CENTER,CENTER);
- 
- // make the manager
- Interactive.make( this );
- buttons = new MSButton[num_rows][num_cols];
- //your code to declare and initialize buttons goes here
- for (int i = 0; i < num_rows; i++)
- {
- for (int j = 0; j < num_cols; j++)
- {
- buttons[i][j] = new MSButton(i, j);
- }
- }
- 
- 
- setBombs();
- }
- public void setBombs()
- {
- //your code
- for (int i = 0; i < numBombs; i ++)
- {
- 
- }
- }
- 
- public void draw ()
- {
- background(255);
- for (int i = 0; i < num_rows; i++)
- {
- for (int j = 0; j < num_cols; j++)
- {
- buttons[i][j].draw();
- System.out.println(i + "," + j);
- }
- }
- if(isWon())
- displayWinningMessage();
- }
- public boolean isWon()
- {
- //your code here
- return false;
- }
- public void displayLosingMessage()
- {
- //your code here
- }
- public void displayWinningMessage()
- {
- //your code here
- }
- 
- public class MSButton
- {
- private int r, c;
- private float x,y, width, height;
- private boolean clicked, marked;
- private String label;
- 
- public MSButton ( int rr, int cc )
- {
- width = 750/num_cols;
- height = 750/num_rows;
- r = rr;
- c = cc; 
- x = c*width + 125;
- y = r*height;
- label = "";
- marked = clicked = false;
- Interactive.add( this ); // register it with the manager
- }
- public boolean isMarked()
- {
- return marked;
- }
- public boolean isClicked()
- {
- if (keyPressed == true; &&)
- return clicked;
- }
- // called by manager
- 
- public void mousePressed () 
- {
- clicked = true;
- //your code here
- }
- public void draw () 
- {
- if (marked)
- fill(0);
- // else if( clicked && bombs.contains(this) ) 
- //     fill(255,0,0);
- else if(clicked)
- fill( 200 );
- else 
- fill( 100 );
- 
- rect(x, y, width, height);
- fill(0);
- text(label,x+width/2,y+height/2);
- }
- public void setLabel(String newLabel)
- {
- label = newLabel;
- }
- public boolean isValid(int r, int c)
- {
- //your code here
- return false;
- }
- public int countBombs(int row, int col)
- {
- int numBombs = 0;
- //your code here
- return numBombs;
- }
- }*/
+public void mouseReleased(MouseEvent i)
+{
+  if (i.getButton() == LEFT)
+  {
+    j = false;
+  }
+}
